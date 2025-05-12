@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>位置评级可视化系统</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 引入SheetJS库 -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+    <!-- 顶部栏 -->
+    <div class="header" id="header">
+        <div class="header-top">
+            <button class="toggle-header-btn" onclick="toggleHeader()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 style="margin: 0; font-size: 1.2rem;">位置评级系统</h1>
+        </div>
+        <div class="header-content">
+            <div class="button-group">
+                <button class="primary-btn" onclick="showRatingModal()">
+                    <i class="fas fa-plus"></i> 添加新位置
+                </button>
+                <button class="info-btn" onclick="exportToExcel()">
+                    <i class="fas fa-file-excel"></i> 导出Excel
+                </button>
+                <button class="danger-btn" onclick="clearStorage()">
+                    <i class="fas fa-trash"></i> 清空数据
+                </button>
+                </button>
+                <input type="file" id="fileInput" accept=".xlsx" style="display: none;" onchange="importFromExcel()" />
+                <button class="info-btn" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-file-import"></i> 导入数据
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar" id="sidebar">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="collapsed-tooltip">展开侧边栏</span>
+
+            <div class="sidebar-content">
+                <h3>数据统计</h3>
+                <div class="stats-container" id="statsContainer">
+                    <p>暂无统计数据</p>
+                </div>
+
+                <h3>图例</h3>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color rating-A"></div>
+                        <span>A级</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color rating-B"></div>
+                        <span>B级</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color rating-C"></div>
+                        <span>C级</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color rating-D"></div>
+                        <span>D级</span>
+                    </div>
+                </div>
+
+                <div class="heatmap-controls">
+                    <button class="info-btn" onclick="toggleWindLayer()">
+                        <i class="fas fa-wind"></i> 切换风向图
+                    </button>
+                    <h3>热力图控制</h3>
+                    <button onclick="toggleHeatmap()">
+                        <i class="fas fa-fire"></i> 切换热力图
+                    </button>
+                    <div>
+                        <label>热力图强度: </label>
+                        <input type="range" id="heatmapIntensity" min="1" max="20" value="10" onchange="updateHeatmap()">
+                    </div>
+                    <div>
+                        <label>热力图半径: </label>
+                        <input type="range" id="heatmapRadius" min="5" max="50" value="25" onchange="updateHeatmap()">
+                    </div>
+                </div>
+
+                <div class="location-list">
+                    <h3>位置列表</h3>
+                    <div id="locationList">
+                        <p>暂无位置数据</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 地图容器 -->
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- 添加位置评级模态框 -->
+    <div id="ratingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>添加新位置评级</h2>
+            <p id="modalMessage">正在获取您的位置...</p>
+
+            <div class="rating-options" id="ratingOptions" style="display: none;">
+                <button class="rating-btn rating-A" onclick="selectRating('A')">A</button>
+                <button class="rating-btn rating-B" onclick="selectRating('B')">B</button>
+                <button class="rating-btn rating-C" onclick="selectRating('C')">C</button>
+                <button class="rating-btn rating-D" onclick="selectRating('D')">D</button>
+            </div>
+
+            <div id="locationPreview" style="margin-top: 20px; display: none;">
+                <p><strong>纬度:</strong> <span id="previewLat"></span></p>
+                <p><strong>经度:</strong> <span id="previewLng"></span></p>
+                <p><strong>精确度:</strong> ±<span id="previewAcc"></span> 米</p>
+            </div>
+
+            <button id="confirmBtn" class="primary-btn" style="margin-top: 20px; display: none;" onclick="saveLocationWithRating()">确认保存</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="https://api.windy.com/assets/map-forecast/libBoot.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
