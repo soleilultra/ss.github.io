@@ -1,0 +1,366 @@
+:root {
+    --sidebar-width: 300px;
+    --sidebar-collapsed-width: 50px;
+    --header-height: auto;
+    --header-collapsed-height: 40px;
+    --transition-speed: 0.3s;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* 顶部栏样式 */
+.header {
+    background-color: #f8f9fa;
+    padding: 0 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 100;
+    height: var(--header-height);
+    transition: height var(--transition-speed);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    overflow: visible; /* 允许内容超出显示 */
+}
+
+.header.collapsed {
+    height: var(--header-collapsed-height);
+}
+
+.header-top {
+    line-height: var(--header-collapsed-height); /* 设置行高与高度一致 */
+    padding: 0 15px; /* 确保内边距不会挤压文字 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--header-collapsed-height);
+    min-height: var(--header-collapsed-height);
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    transition: opacity var(--transition-speed);
+    padding: 5px 0;
+}
+
+.header.collapsed .header-content {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+.toggle-header-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    margin: 0;
+}
+
+/* 主容器样式 */
+.container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* 侧边栏样式 - 修复按钮遮挡问题 */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: #f8f9fa;
+    transition: width var(--transition-speed);
+    overflow: visible; /* 修改为visible使按钮不被裁剪 */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 10; /* 确保侧边栏在地图上方 */
+}
+
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+.sidebar-toggle {
+    position: absolute;
+    right: -15px; /* 将按钮移到侧边栏外侧 */
+    top: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20; /* 确保按钮在最上层 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.sidebar-content {
+    padding: 15px;
+    overflow-y: auto;
+    flex: 1;
+    transition: opacity var(--transition-speed);
+}
+
+.sidebar.collapsed .sidebar-content {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 地图容器样式 */
+.map-container {
+    flex: 1;
+    position: relative;
+    transition: margin-left var(--transition-speed);
+    height: calc(100vh - var(--header-height)) ;
+    z-index: 5;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+/* 按钮样式 */
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.button-group button {
+    flex: 1;
+    min-width: 120px;
+}
+
+button {
+    padding: 8px 15px;
+    margin: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.primary-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.danger-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.info-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+/* 评级颜色 */
+.rating-A {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.rating-B {
+    background-color: #8BC34A;
+    color: white;
+}
+
+.rating-C {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.rating-D {
+    background-color: #FF9800;
+    color: #333;
+}
+
+/* 统计容器样式 */
+.stats-container {
+    margin-top: 20px;
+}
+
+.stat-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* 图例样式 */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    margin-bottom: 5px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 3px;
+}
+
+/* 热力图控制样式 */
+.heatmap-controls {
+    margin-top: 15px;
+}
+
+/* 位置列表样式 */
+.location-list {
+    margin-top: 20px;
+}
+
+.location-item {
+    padding: 8px;
+    margin-bottom: 5px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.location-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* 模态框样式 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 评级选项样式 */
+.rating-options {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.rating-btn {
+    width: 50px;
+    height: 50px;
+    margin: 0 5px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.rating-btn.selected-rating {
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    z-index: 1;
+}
+
+/* 半径统计样式 */
+.radius-stats {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.radius-stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+/* 折叠状态下的工具提示 */
+.collapsed-tooltip {
+    position: absolute;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 100;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    left: 60px;
+    top: 10px;
+}
+
+.sidebar-toggle:hover + .collapsed-tooltip {
+    opacity: 1;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .button-group button {
+        min-width: 100%;
+    }
+
+    .sidebar {
+        position: absolute;
+        height: 100%;
+        z-index: 100;
+    }
+
+    .sidebar.collapsed {
+        transform: translateX(calc(-100% + var(--sidebar-collapsed-width)));
+    }
+
+    .sidebar-toggle {
+        right: auto;
+        left: calc(100% - 15px);
+    }
+}
